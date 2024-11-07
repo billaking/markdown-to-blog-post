@@ -40,6 +40,9 @@ export default class MarkdownToHtmlPlugin extends Plugin {
     try {
       let markdownContent = await this.app.vault.read(activeFile);
 
+      // Remove frontmatter if present
+      markdownContent = markdownContent.replace(/^---[\s\S]*?---\n/, '');
+      
       // Convert this string '![[image]]' to <img src="image" alt="image">
       markdownContent = markdownContent.replace(/!\[\[([^\]]+)\]\]/g, (match, p1) => {
         return `<img src="${imageUrl}${p1.replace(/ /g, '-')}" alt="${p1}">`;
