@@ -4,11 +4,13 @@ import { marked } from 'marked';
 
 
 interface MarkdownToHtmlPluginSettings {
-  webUrl: string;
+  imageUrl: string;
+  documentUrl: string;
 }
 
 const DEFAULT_SETTINGS: MarkdownToHtmlPluginSettings = {
-  webUrl: '/sites/default/files/inline-images/',
+  imageUrl: '/sites/default/files/inline-images/',
+  documentUrl: 'https://www.cooljcxii.org/',
 };
 
 
@@ -31,10 +33,7 @@ export default class MarkdownToHtmlPlugin extends Plugin {
 
   async convertMarkdownToHtml() {
 
-    const webUrl = this.settings.webUrl;
-
-
-    console.log('Web URL:', webUrl);
+    const {imageUrl, documentUrl} = this.settings;
 
 
     const activeFile = this.app.workspace.getActiveFile();
@@ -48,12 +47,12 @@ export default class MarkdownToHtmlPlugin extends Plugin {
 
       // Convert [[link]] to <a href="link">link</a>
       markdownContent = markdownContent.replace(/\[\[([^\]]+)\]\]/g, (match, p1) => {
-        return `<a href="${webUrl}${p1.replace(' ','-')}">${p1}</a>`;
+        return `<a href="${documentUrl}${p1.replace(' ','-')}">${p1}</a>`;
       });
       
       // Convert ![[image]] to <img src="image" alt="image">
       markdownContent = markdownContent.replace(/!\[\[([^\]]+)\]\]/g, (match, p1) => {
-        return `<img src="${webUrl}${p1.replace(' ','-')}" alt="${p1}">`;
+        return `<img src="${imageUrl}${p1.replace(' ','-')}" alt="${p1}">`;
       });
 
       const htmlContent = marked(markdownContent);
@@ -70,12 +69,11 @@ export default class MarkdownToHtmlPlugin extends Plugin {
 
   async loadSettings() {
     this.settings = DEFAULT_SETTINGS;
-    console.log('Loaded settings:', this.settings.webUrl);
   }
 
   async saveSettings() {
     await this.saveData(this.settings);
-    console.log('Saved settings:', this.settings.webUrl);
+    console.log('Saved settings:', this.settings);
   }
 
   onunload() {
@@ -100,15 +98,26 @@ export default class MarkdownToHtmlPlugin extends Plugin {
       containerEl.createEl('p', { text: 'This plugin will convert most markdown tags into a html structure so that you can paste your note content into a Content Management System (CMS) like Drupal or Wordpress; without having to do it manually.' });
 
       new Setting(containerEl)
-        .setName('Location of images, documents, etc')
+        .setName('Web path to your images folder')
         .setDesc('URL to prefix the markdown links to. Example for Drupal: /sites/default/files/inline-images/')
         .addText(text => text
           .setPlaceholder('/sites/default/files/inline-images/')
-          .setValue(this.plugin.settings.webUrl)
+          .setValue(this.plugin.settings.imageUrl)
           .onChange(async (value) => {
-            this.plugin.settings.webUrl = value;
+            this.plugin.settings.imageUrl = value;
             await this.plugin.saveSettings();
           }));
+
+          new Setting(containerEl)
+          .setName('Web path to your web documents folder')
+          .setDesc('URL to prefix the markdown links to. Example for Drupal: /sites/default/files/inline-images/')
+          .addText(text => text
+            .setPlaceholder('/')
+            .setValue(this.plugin.settings.documentUrl)
+            .onChange(async (value) => {
+              this.plugin.settings.documentUrl = value;
+              await this.plugin.saveSettings();
+            }));
     containerEl.createEl('p', { text: 'To report bug contact me at ' });
 
 
