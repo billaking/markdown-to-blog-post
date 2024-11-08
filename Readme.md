@@ -9,6 +9,10 @@ This plugin allows you to convert markdown files to a structure where you can ta
 
 ## Usage
 
+This plugin allows you to convert markdown files to a structure where you can take the body and past it directly into a blog post in a CMS such as WordPress or Drupal. It will convert a single markdown file. 
+
+**Choose the markdown file you want to convert to a blog post and run the command or press the button**
+
 The output of the conversion is a html structure without the <html>, <head>, <body> tags, so you can post directly to your blog. There are two ways to use this plugin:
 
 1. **Convert the note by running a command**: Open the note you want to convert and run the command "Markdown to blog post". 
