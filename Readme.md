@@ -2,25 +2,6 @@
 
 This plugin allows you to convert markdown files to a structure where you can take the body and past it directly into a blog post in a CMS such as WordPress or Drupal. It is designed to work with the [Obsidian](https://obsidian.md/) note-taking app.
 
-## Install dependencies
-
-```bash
-npm install
-```
-
-## Build
-
-```bash
-npm run build
-```
-
-## Run
-
-```bash
-npm run start
-```
-
-
 ## Installation
 
 1. Extract the zip file into your vault's plugins folder: `<vault>/.obsidian/plugins/`
@@ -37,10 +18,11 @@ The output of the conversion is a html structure without the <html>, <head>, <bo
 
 - [x] Convert markdown to blog post html structure.
 - [x] Add configuration options to customize the output to a source path.
-- [ ] Get the input for the source path from the user and set it as a default.
-- [ ] If the file exists increment and post the new name with a variation at the end of the file before the file extension.
+- [x] Get the input for the source path from the user and set it as a default.
+- [x] If the file exists increment and post the new name with a variation at the end of the file before the file extension.
+- [x] Ignore frontmatter when converting the markdown to a blog post.
 
 
 ## Contact me
 
-If you have any questions or suggestions, feel free to contact me and report bugs at [https://github.com/billaking](https://github.com/billaking).
+If you have any questions or suggestions, feel free to contact me at [https://www.billaking.com](https://www.billaking.com).
