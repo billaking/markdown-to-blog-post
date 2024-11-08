@@ -25,6 +25,12 @@ The output of the conversion is a html structure without the <html>, <head>, <bo
 - [x] Get the input for the source path from the user and set it as a default.
 - [x] If the file exists increment and post the new name with a variation at the end of the file before the file extension.
 - [x] Ignore frontmatter when converting the markdown to a blog post.
+- [ ] Follow the links in the root document and convert them to the blog post structure.
+  - [ ] Provide a configuration option to set a `number` that tells the pointer how deep to traverse the links in order to create new documents
+  - [ ] Add a configuration option to set the output path.
+  - [ ] Check if the directory exists and create it if it doesn't.
+  - [ ] Check if the files exists and prompt the user to overwrite or increment the file name.
+  - [ ] Make sure the plugin put all the files into a single directory as separate html files.
 
 
 ## Contact me
