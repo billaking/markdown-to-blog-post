@@ -1,10 +1,10 @@
 {
-    "id": "markdown-to-blog-post",
-    "name": "Markdown to Blog post",
-    "version": "1.0.0",
-    "minAppVersion": "0.12.0",
-    "description": "A plugin to convert markdown to a structure for pasting in other applications like a blog.",
-    "author": "Billaking",
-    "authorUrl": "https://billaking.com",
-    "isDesktopOnly": false
-  }
+  "id": "convert-note-to-html-html-markdown-mix",
+  "name": "Markdown to Blog post",
+  "version": "1.0.6",
+  "minAppVersion": "0.12.0",
+  "description": "A plugin to convert a single markdown note to raw html or mix markdown with html for use in a blog post or using html markdown mix for dataview displays.",
+  "author": "Billaking",
+  "authorUrl": "https://billaking.com",
+  "isDesktopOnly": false
+}
