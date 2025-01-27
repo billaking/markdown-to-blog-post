@@ -7,6 +7,7 @@ interface MarkdownToHtmlPluginSettings {
     useAppUrl: boolean;
     useHtmlExtension: boolean;
     useThisIcon: string;
+    savePath: string;
 }
 
 const DEFAULT_SETTINGS: MarkdownToHtmlPluginSettings = {
@@ -15,6 +16,7 @@ const DEFAULT_SETTINGS: MarkdownToHtmlPluginSettings = {
     useAppUrl: false,
     useHtmlExtension: false,
     useThisIcon: 'file-code-2',
+    savePath: 'HTML',
 };
 
 export default class MarkdownToHtmlPlugin extends Plugin {
@@ -38,7 +40,7 @@ export default class MarkdownToHtmlPlugin extends Plugin {
     }
 
     async convertMarkdownToHtml() {
-        const { imageUrl, documentUrl, useAppUrl, useHtmlExtension} = this.settings;
+        const { imageUrl, documentUrl, useAppUrl, useHtmlExtension, savePath} = this.settings;
         const activeFile = this.app.workspace.getActiveFile();
         if (!activeFile) {
             new Notice('No active file found');
@@ -64,7 +66,12 @@ export default class MarkdownToHtmlPlugin extends Plugin {
             marked.use({renderer});
             const htmlContent = marked(markdownContent);
             const html = `<div>${htmlContent}</div>`;
-            const htmlFileName = activeFile.basename + (useHtmlExtension ? '.html' : '.html.md');
+            const htmlFileName = `${savePath}/${activeFile.basename}${useHtmlExtension ? '.html' : '.html.md'}`;
+
+            const folderExists = this.app.vault.getAbstractFileByPath(savePath);
+            if (!folderExists) {
+                await this.app.vault.createFolder(savePath);
+            }
 
             const existingFile = this.app.vault.getAbstractFileByPath(htmlFileName);
             if (existingFile) {
@@ -169,6 +176,18 @@ class MarkdownToHtmlSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.useThisIcon)
                 .onChange(async (value) => {
                     this.plugin.settings.useThisIcon = value;
+                    await this.plugin.saveSettings();
+                })
+            );
+
+        new Setting(containerEl)
+            .setName('Save path')
+            .setDesc('Default is HTML. The folder where the files are saved')
+            .addText(text => text
+                .setPlaceholder('HTML')
+                .setValue(this.plugin.settings.savePath)
+                .onChange(async (value) => {
+                    this.plugin.settings.savePath = value;
                     await this.plugin.saveSettings();
                 })
             );
