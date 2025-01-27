@@ -1,5 +1,6 @@
 {
   "imageUrl": "/sites/default/files/inline-images/",
   "documentUrl": "/node/",
-  "useAppUrl": true
+  "useAppUrl": true,
+  "useHtmlExtension": false
 }
