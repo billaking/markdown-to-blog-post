@@ -6,13 +6,15 @@ interface MarkdownToHtmlPluginSettings {
     documentUrl: string;
     useAppUrl: boolean;
     useHtmlExtension: boolean;
+    useThisIcon: string;
 }
 
 const DEFAULT_SETTINGS: MarkdownToHtmlPluginSettings = {
     imageUrl: '/sites/default/files/inline-images/',
-    documentUrl: 'https://www.cooljcxii.org/',
+    documentUrl: 'https://www.billaking.com/',
     useAppUrl: false,
     useHtmlExtension: false,
+    useThisIcon: 'file-code-2',
 };
 
 export default class MarkdownToHtmlPlugin extends Plugin {
@@ -21,18 +23,22 @@ export default class MarkdownToHtmlPlugin extends Plugin {
     async onload() {
         await this.loadSettings();
         this.addCommand({
-            id: 'convert-markdown-to-blog-post',
-            name: 'Convert Markdown to Blog Post',
+            id: 'convert-note-to-html-html-markdown-mix',
+            name: 'Converts note to raw html or mix markdown with html',
             callback: () => this.convertMarkdownToHtml(),
         });
         this.addSettingTab(new MarkdownToHtmlSettingTab(this.app, this));
-        this.addRibbonIcon('globe', 'Convert current note to blog post', async () => {
+        this.updateRibbonIcon();
+    }
+
+    updateRibbonIcon() {
+        this.addRibbonIcon(this.settings.useThisIcon, 'Converts note...', async () => {
             await this.convertMarkdownToHtml();
         });
     }
 
     async convertMarkdownToHtml() {
-        const {imageUrl, documentUrl, useAppUrl, useHtmlExtension} = this.settings;
+        const { imageUrl, documentUrl, useAppUrl, useHtmlExtension} = this.settings;
         const activeFile = this.app.workspace.getActiveFile();
         if (!activeFile) {
             new Notice('No active file found');
@@ -55,10 +61,10 @@ export default class MarkdownToHtmlPlugin extends Plugin {
                 return `[${text}](${href})`;
             };
 
-            marked.use({ renderer });
+            marked.use({renderer});
             const htmlContent = marked(markdownContent);
             const html = `<div>${htmlContent}</div>`;
-            const htmlFileName = activeFile.basename + (useHtmlExtension ? '.html' :'.html.md');
+            const htmlFileName = activeFile.basename + (useHtmlExtension ? '.html' : '.html.md');
 
             const existingFile = this.app.vault.getAbstractFileByPath(htmlFileName);
             if (existingFile) {
@@ -81,7 +87,11 @@ export default class MarkdownToHtmlPlugin extends Plugin {
     }
 
     async saveSettings() {
+        if (!this.settings.useThisIcon) {
+            this.settings.useThisIcon = 'file-code-2';
+        }
         await this.saveData(this.settings);
+        this.updateRibbonIcon();
     }
 
     onunload() {
@@ -149,6 +159,20 @@ class MarkdownToHtmlSettingTab extends PluginSettingTab {
                         await this.plugin.saveSettings();
                     })
             );
+
+
+        new Setting(containerEl)
+            .setName('Menu icon')
+            .setDesc('Default is file-code-2. See https://lucide.dev/icons/?search=html for more icons')
+            .addText(text => text
+                .setPlaceholder('file-code-2')
+                .setValue(this.plugin.settings.useThisIcon)
+                .onChange(async (value) => {
+                    this.plugin.settings.useThisIcon = value;
+                    await this.plugin.saveSettings();
+                })
+            );
+
 
         containerEl.createEl('p', {text: 'To report bug contact me at GitHub https://github.com/billaking'});
     }

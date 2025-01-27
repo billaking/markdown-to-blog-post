@@ -2,5 +2,6 @@
   "imageUrl": "/sites/default/files/inline-images/",
   "documentUrl": "/node/",
   "useAppUrl": true,
-  "useHtmlExtension": false
+  "useHtmlExtension": false,
+  "useThisIcon": "file-code-2"
 }
