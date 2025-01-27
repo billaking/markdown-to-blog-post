@@ -1,3 +1,5 @@
 {
-  "webUrl": "/sites/default/files/inline-images/"
+  "imageUrl": "/sites/default/files/inline-images/",
+  "documentUrl": "/node/",
+  "useAppUrl": true
 }
